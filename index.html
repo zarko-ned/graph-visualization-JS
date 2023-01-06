@@ -21,50 +21,13 @@
   var width = svg.attr("width");
   var height = svg.attr("height");
   //intialize data
-  var g = {
-    nodes: [
-      { name: "Alice" },
-      { name: "Bob" },
-      { name: "Chen" },
-      { name: "Dawg" },
-      { name: "Ethan" },
-      { name: "George" },
-      { name: "Frank" },
-      { name: "Hanes" }
-    ],
-    links: [
-      { source: "Alice", target: "Bob" },
-      { source: "Chen", target: "Bob" },
-      { source: "Dawg", target: "Chen" },
-      { source: "Hanes", target: "Frank" },
-      { source: "Hanes", target: "George" },
-      { source: "Dawg", target: "Ethan" }
-    ]
-  };
+  var g = createGraph();
+  addNode(g, 'A', 3)
+  addNode(g, 'B');
+  addLink(g,'A', 'B')
 
-  var simulation = window.forceSimulation(g);
+  var simulation = forceSimulation(g);
+  var link = simulationLink(g);
+  var node = simulationNode(g);
 
-  var link = window.simulationLink(g);
-
-
-
-  var node = window.simulationNode(g);
-
-
-
-  function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-    d.fx = d.x;
-    d.fy = d.y;
-  }
-
-  function dragged(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
-  }
-
-  function dragended(d) {
-    if (!d3.event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
-  }
+</script>

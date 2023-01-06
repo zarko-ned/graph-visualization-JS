@@ -46,7 +46,7 @@ function forceSimulation(graph) {
             });
     }
 
-    
+
 
 }
 
@@ -64,7 +64,7 @@ function simulationLink(graph, cssColor = 'red', width = 3) {
         });
 }
 
-function simulationNode(graph) {
+function simulationNode(graph, cssColor = 'red') {
     return svg
         .append("g")
         .attr("class", "nodes")
@@ -72,9 +72,11 @@ function simulationNode(graph) {
         .data(graph.nodes)
         .enter()
         .append("circle")
-        .attr("r", 5)
+        .attr("r", function(d) {
+            return d.size;
+          })
         .attr("fill", function (d) {
-            return "red";
+            return cssColor;
         })
         .call(
             d3
@@ -88,19 +90,34 @@ function simulationNode(graph) {
 
 function showNodeName(graph) {
     var node = svg.selectAll(".node")
-      .data(graph.nodes)
-      .enter().append("g")
-      .attr("class", "node")
-      .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
-  
+        .data(graph.nodes)
+        .enter().append("g")
+        .attr("class", "node")
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
     node.append("circle")
-      .attr("r", 5);
-  
+        .attr("r", 5);
+
     node.append("text")
-      .attr("dy", -3)
-      .text(function (d) { return d.name; });
+        .attr("dy", -3)
+        .text(function (d) { return d.name; });
+
     return node;
+}
+function dragstarted(d) {
+    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+} function dragged(d) {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+}
+
+function dragended(d) {
+    if (!d3.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
 }
