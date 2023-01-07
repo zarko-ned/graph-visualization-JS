@@ -45,7 +45,7 @@ function forceSimulation(graph) {
  * @param {number} lineWidth - The width of the lines.
  * @returns {Object} The line elements.
  */
-function simulationLink(graph, cssColor = 'red', lineWidth = 3) {
+function simulationLink(graph, cssColor = 'orange', lineWidth = 3) {
     // Append the line elements to the SVG
     const line = svg
       .append("g")
