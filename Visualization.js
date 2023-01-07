@@ -1,112 +1,130 @@
+/**
+ * Returns a force simulation for the given graph.
+ * 
+ * @param {Object} graph - The graph object.
+ * @returns {Object} The force simulation.
+ */
 function forceSimulation(graph) {
-    return d3
-        .forceSimulation(graph.nodes)
-        .force(
-            "link",
-            d3
-                .forceLink()
-                .id(function (d) {
-                    return d.name;
-                })
-                .links(graph.links)
-        )
+    // Create the force link and force many body forces
+    const forceLink = d3
+      .forceLink()
+      .id(d => d.name)
+      .links(graph.links);
+    const forceManyBody = d3.forceManyBody().strength(-30);
+  
+    // Create the force simulation and add the forces
+    const simulation = d3
+      .forceSimulation(graph.nodes)
+      .force("link", forceLink)
+      .force("charge", forceManyBody)
+      .force("center", d3.forceCenter(width / 2, height / 2));
+  
+    // Add a tick event to update the link and node positions
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+      node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+      node.select("text")
+        .attr("x", d => d.x)
+        .attr("y", d => d.y);
+    });
+  
+    return simulation;
+  }
 
-        .force("charge", d3.forceManyBody().strength(-30))
-        .force("center", d3.forceCenter(width / 2, height / 2))
-        .on("tick", ticked);
+/**
+ * Appends a line element for each link in the given graph to the SVG.
+ * 
+ * @param {Object} graph - The graph object.
+ * @param {string} cssColor - The CSS color of the lines.
+ * @param {number} lineWidth - The width of the lines.
+ * @returns {Object} The line elements.
+ */
+function simulationLink(graph, cssColor = 'red', lineWidth = 3) {
+    // Append the line elements to the SVG
+    const line = svg
+      .append("g")
+      .attr("class", "links")
+      .selectAll("line")
+      .data(graph.links)
+      .enter()
+      .append("line")
+      .style("stroke", cssColor)
+      .attr("stroke-width", d => lineWidth);
+  
+    return line;
+  }
 
-    function ticked() {
-        link
-            .attr("x1", function (d) {
-                return d.source.x;
-            })
-            .attr("y1", function (d) {
-                return d.source.y;
-            })
-            .attr("x2", function (d) {
-                return d.target.x;
-            })
-            .attr("y2", function (d) {
-                return d.target.y;
-            });
-
-        node
-            .attr("cx", function (d) {
-                return d.x;
-            })
-            .attr("cy", function (d) {
-                return d.y;
-            });
-        node.select("text")
-            .attr("x", function (d) {
-                return d.x;
-            })
-            .attr("y", function (d) {
-                return d.y;
-            });
-    }
-
-
-
-}
-
-function simulationLink(graph, cssColor = 'red', width = 3) {
-    return svg
-        .append("g")
-        .attr("class", "links")
-        .selectAll("line")
-        .data(graph.links)
-        .enter()
-        .append("line")
-        .style("stroke", cssColor)
-        .attr("stroke-width", function (d) {
-            return width;
-        });
-}
-
+/**
+ * Appends a circle element for each node in the given graph to the SVG.
+ * 
+ * @param {Object} graph - The graph object.
+ * @param {string} cssColor - The CSS color of the circles.
+ * @returns {Object} The circle elements.
+ */
 function simulationNode(graph, cssColor = 'red') {
-    return svg
-        .append("g")
-        .attr("class", "nodes")
-        .selectAll("circle")
-        .data(graph.nodes)
-        .enter()
-        .append("circle")
-        .attr("r", function(d) {
-            return d.size;
-          })
-        .attr("fill", function (d) {
-            return cssColor;
-        })
-        .call(
-            d3
-                .drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended)
-        );
-}
-
-
-function showNodeName(graph) {
-    var node = svg.selectAll(".node")
-        .data(graph.nodes)
-        .enter().append("g")
-        .attr("class", "node")
-        .call(d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended));
-
-    node.append("circle")
-        .attr("r", 5);
-
-    node.append("text")
-        .attr("dy", -3)
-        .text(function (d) { return d.name; });
-
+    // Append the circle elements to the SVG
+    const node = svg
+      .append("g")
+      .attr("class", "nodes")
+      .selectAll("circle")
+      .data(graph.nodes)
+      .enter()
+      .append("circle")
+      .attr("r", d => d.size)
+      .attr("fill", cssColor)
+      .call(
+        d3
+          .drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended)
+      );
+  
     return node;
-}
+  }
+
+
+/**
+ * Appends a circle and a text element for each node in the given graph to the SVG.
+ * 
+ * @param {Object} graph - The graph object.
+ * @returns {Object} The group elements containing the circle and text elements.
+ */
+function showNodeName(graph) {
+    // Append the group elements to the SVG
+    const nodeGroup = svg
+      .selectAll(".node")
+      .data(graph.nodes)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .call(
+        d3
+          .drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended)
+      );
+  
+    // Append the circle elements to the group elements
+    nodeGroup
+      .append("circle")
+      .attr("r", 5);
+  
+    // Append the text elements to the group elements
+    const nodeLabel = nodeGroup
+      .append("text")
+      .attr("dy", -3)
+      .text(d => d.name);
+  
+    return nodeGroup;
+  }
 function dragstarted(d) {
     if (!d3.event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;

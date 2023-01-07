@@ -32,7 +32,7 @@ function getNodeDegree(graph, nodeName, byNodeId = false) {
  * @param {Object} graph - The graph object.
  * @param {string|number} nodeName - The name or ID of the node.
  * @param {boolean} [byNodeId=false] - If true, the `nodeName` parameter is interpreted as the node ID.
- * @returns {Nodes[]} The array of neighbor .
+ * @returns {Object[]} The array of neighbor .
  */
 function findNeighbors(graph, nodeName, byNodeId) {
     const neighbors = [];
