@@ -42,27 +42,38 @@ function addNode(graph, nodeName, nodeId, size = 3) {
 
 /**
  * Adds a link between two nodes in the given graph.
- * 
+ *
  * @param {Object} graph - The graph object.
- * @param {string} source - The name of the source node.
- * @param {string} target - The name of the target node.
+ * @param {(string|number)} source - The name or ID of the source node.
+ * @param {(string|number)} target - The name or ID of the target node.
+ * @param {boolean} [byNodeId=false] - If true, the `source` and `target` parameters are interpreted as node IDs.
+ * @throws {Error} If the source or target node is not found, or if there are multiple nodes with the same name.
  */
-function addLink(graph, source, target,) {
+function addLink(graph, source, target, byNodeId = false) {
     // Find the source and target nodes in the graph
-    const sourceNode = graph.nodes.find(node => node.name === source);
-    const targetNode = graph.nodes.find(node => node.name === target);
+    let sourceNode, targetNode;
+    if (byNodeId) {
+        sourceNode = graph.nodes.find(node => node.id === source);
+        targetNode = graph.nodes.find(node => node.id === target);
+        if (!sourceNode) throw new Error(`Node with id ${source} does not exist!`);
+        if (!targetNode) throw new Error(`Node with id ${target} does not exist!`);
+    } else {
+        sourceNode = graph.nodes.find(node => node.name === source);
+        targetNode = graph.nodes.find(node => node.name === target);
 
-    // Throw an error if the source or target node is not found
-    if (!sourceNode) throw new Error(`Node with name ${source} does not exist!`);
-    if (!targetNode) throw new Error(`Node with name ${target} does not exist!`);
+        // Throw an error if the source or target node is not found
+        if (!sourceNode) throw new Error(`Node with name ${source} does not exist!`);
+        if (!targetNode) throw new Error(`Node with name ${target} does not exist!`);
 
-    // Throw an error if there are multiple nodes with the same name
-    const sourceNodes = graph.nodes.filter(node => node.name === source);
-    const targetNodes = graph.nodes.filter(node => node.name === target);
-    if (sourceNodes.length > 1 || targetNodes.length > 1) {
-        throw new Error(`There are multiple nodes with name ${source} or ${target}!`);
+        // Throw an error if there are multiple nodes with the same name
+        const sourceNodes = graph.nodes.filter(node => node.name === source);
+        const targetNodes = graph.nodes.filter(node => node.name === target);
+        if (sourceNodes.length > 1 || targetNodes.length > 1) {
+            throw new Error(`There are multiple nodes with name ${source} or ${target}!`);
+        }
+
+
     }
-
     // Create the new link object and add it to the graph
     const newLink = { source: sourceNode, target: targetNode };
     graph.links.push(newLink);

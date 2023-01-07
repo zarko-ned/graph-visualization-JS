@@ -81,7 +81,7 @@ function numberOfConnectedComponents(graph) {
   return componentCount;
 
   function dfs(node) {
-    visited[node] = true;
+    visited[node] = true; 
     for (let neighbor of adjList[node]) {
       if (!visited[neighbor]) {
         dfs(neighbor);
@@ -96,7 +96,7 @@ function numberOfConnectedComponents(graph) {
  * @param {number} id - The ID of the node to find.
  * @param {Object} graph - The graph object.
  * @returns {(Object)} The node object.
- * @throws {Error} If no nodes with the given name are found.
+ * @throws {Error} If no nodes with the given ID are found.
  */
 function getNodeById(graph, id) {
   const node = graph.nodes.find(node => node.id == id);
