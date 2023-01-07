@@ -14,8 +14,6 @@ function createGraph() {
     return graph;
 }
 
-
-
 /**
  * Adds a node to the given graph.
  * 
@@ -42,34 +40,50 @@ function addNode(graph, nodeName, nodeId, size = 3) {
     graph.nodes.push(newNode);
 }
 
-function addLink(graph, source, target) {
-    let foundSource;
-    let foundTarget;
+/**
+ * Adds a link between two nodes in the given graph.
+ * 
+ * @param {Object} graph - The graph object.
+ * @param {string} source - The name of the source node.
+ * @param {string} target - The name of the target node.
+ */
+function addLink(graph, source, target,) {
+    // Find the source and target nodes in the graph
+    const sourceNode = graph.nodes.find(node => node.name === source);
+    const targetNode = graph.nodes.find(node => node.name === target);
 
+    // Throw an error if the source or target node is not found
+    if (!sourceNode) throw new Error(`Node with name ${source} does not exist!`);
+    if (!targetNode) throw new Error(`Node with name ${target} does not exist!`);
 
-    if (!graph.nodes.some(node => node.name === source))
-        throw new Error(`Node with name ${source} does not exists!`);
-    if (!graph.nodes.some(node => node.name === target))
-        throw new Error(`Node with name ${target} does not exists!`);
-
-    graph.nodes.forEach(function (e) {
-        if (e.name === source)
-            foundSource += 1;
-        if (e.name === target)
-            foundTarget += 1;
-    })
-
-    if (foundSource > 1 || foundTarget > 1) {
-        throw new Error(`There are more nodes with same name!`);
+    // Throw an error if there are multiple nodes with the same name
+    const sourceNodes = graph.nodes.filter(node => node.name === source);
+    const targetNodes = graph.nodes.filter(node => node.name === target);
+    if (sourceNodes.length > 1 || targetNodes.length > 1) {
+        throw new Error(`There are multiple nodes with name ${source} or ${target}!`);
     }
-    let newLink = { source: source, target: target };
+
+    // Create the new link object and add it to the graph
+    const newLink = { source: source, target: target };
     graph.links.push(newLink);
 }
 
+/**
+ * Returns the number of nodes in the given graph.
+ * 
+ * @param {Object} graph - The graph object.
+ * @returns {number} The number of nodes in the graph.
+ */
 function numberOfNodes(graph) {
     return graph.nodes.length;
 }
 
+/**
+ * Returns the number of links in the given graph.
+ * 
+ * @param {Object} graph - The graph object.
+ * @returns {number} The number of links in the graph.
+ */
 function numberOfLinks(graph) {
     return graph.links.length;
 }

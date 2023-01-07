@@ -24,8 +24,9 @@
   // Initialize the graph data
   var graph = createGraph();
   addNode(graph, 'A', 0)
-  addNode(graph, 'B');
-  addLink(graph, 'A', 'B');
+  addNode(graph, 'B', 1);
+
+  addLink(graph, 'A', 'B', true);
   changeSize(graph, 10);
 
   // Initialize the simulation and link and node elements

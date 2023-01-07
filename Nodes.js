@@ -1,3 +1,15 @@
+function getNodeDegree(graph, node) {
+    let degree = 0;
+
+    for (const link of graph.links) {
+        if (link.source === node || link.target === node) {
+            degree++;
+        }
+    }
+
+    return degree;
+}
+
 function findNeighbors(graph, node) {
     const neighbors = [];
 
@@ -10,15 +22,4 @@ function findNeighbors(graph, node) {
     }
 
     return neighbors;
-}
-function getNodeDegree(graph, node) {
-    let degree = 0;
-
-    for (const link of graph.links) {
-        if (link.source === node || link.target === node) {
-            degree++;
-        }
-    }
-
-    return degree;
 }
