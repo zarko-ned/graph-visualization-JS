@@ -16,18 +16,21 @@
 <script src="Standard.js"></script>
 <script src="Visualization.js"></script>
 <script>
-  //initilize svg or grab svg
+  // Select the SVG element and store its width and height
   var svg = d3.select("svg");
   var width = svg.attr("width");
   var height = svg.attr("height");
-  //intialize data
-  var g = createGraph();
-  addNode(g, 'A', 3)
-  addNode(g, 'B');
-  addLink(g,'A', 'B')
 
-  var simulation = forceSimulation(g);
-  var link = simulationLink(g);
-  var node = simulationNode(g);
+  // Initialize the graph data
+  var graph = createGraph();
+  addNode(graph, 'A', 0)
+  addNode(graph, 'B');
+  addLink(graph, 'A', 'B');
+  changeSize(graph, 10);
+
+  // Initialize the simulation and link and node elements
+  var simulation = forceSimulation(graph);
+  var link = simulationLink(graph);
+  var node = simulationNode(graph);
 
 </script>

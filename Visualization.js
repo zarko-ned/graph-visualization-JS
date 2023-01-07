@@ -121,3 +121,16 @@ function dragended(d) {
     d.fx = null;
     d.fy = null;
 }
+
+/**
+ * Changes the size of all nodes in the given graph.
+ * 
+ * @param {Object} graph - The graph object.
+ * @param {number} size - The new size for the nodes.
+ */
+function changeSize(graph, size) {
+    // Iterate over the nodes in the graph
+    for (const node of graph.nodes) {
+      node.size = size;
+    }
+  }
