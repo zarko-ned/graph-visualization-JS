@@ -64,7 +64,7 @@ function addLink(graph, source, target,) {
     }
 
     // Create the new link object and add it to the graph
-    const newLink = { source: source, target: target };
+    const newLink = { source: sourceNode, target: targetNode };
     graph.links.push(newLink);
 }
 

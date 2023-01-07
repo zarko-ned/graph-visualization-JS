@@ -15,6 +15,7 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="Standard.js"></script>
 <script src="Visualization.js"></script>
+<script src="Nodes.js"></script>
 <script>
   // Select the SVG element and store its width and height
   var svg = d3.select("svg");
@@ -25,8 +26,11 @@
   var graph = createGraph();
   addNode(graph, 'A', 0)
   addNode(graph, 'B', 1);
+  addNode(graph, 'C');
+  addLink(graph, 'A', 'B');
+  addLink(graph, 'A', 'C');
 
-  addLink(graph, 'A', 'B', true);
+  console.log(findNeighbors(graph, 'A'));
   changeSize(graph, 10);
 
   // Initialize the simulation and link and node elements
