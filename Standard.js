@@ -98,3 +98,22 @@ function numberOfNodes(graph) {
 function numberOfLinks(graph) {
     return graph.links.length;
 }
+
+/**
+ * Creates a deep copy of a graph object.
+ * @param {Object} graph - The graph object to copy.
+ * @returns {Object} A deep copy of the input graph object.
+ */
+function copyGraph(graph) {
+    // Create a new object to hold the copied properties
+    const copy = {};
+    
+    // Use the spread operator to copy the nodes and links arrays
+    copy.nodes = [...graph.nodes];
+    copy.links = [...graph.links];
+
+    // Use Object.assign() to copy the remaining properties
+    Object.assign(copy, graph);
+
+    return copy;
+}  

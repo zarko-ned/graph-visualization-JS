@@ -61,3 +61,37 @@ function findNeighbors(graph, nodeName, byNodeId) {
 
     return neighbors;
 }
+
+/**
+ * Returns the node object with the given ID in the given graph.
+ *
+ * @param {number} id - The ID of the node to find.
+ * @param {Object} graph - The graph object.
+ * @returns {(Object)} The node object.
+ * @throws {Error} If no nodes with the given ID are found.
+ */
+function getNodeById(graph, id) {
+    const node = graph.nodes.find(node => node.id == id);
+    if (!node) throw new Error(`Node with id ${id} does not exist!`);
+    return node;
+}
+
+/**
+ * Returns an array of node objects with the given name in the given graph.
+ *
+ * @param {Object} graph - The graph object.
+ * @param {string} name - The name of the nodes to find.
+ * @returns {Object[]} An array of node objects.
+ * @throws {Error} If no nodes with the given name are found.
+ */
+function getNodesByName(graph, name) {
+    // Find all nodes with the given name
+    let nodes = graph.nodes.filter(node => node.name === name);
+    if (!nodes.length) {
+        // Throw an error if no nodes with the given name are found
+        throw new Error(`Node with name ${name} does not exist!`);
+    }
+    return nodes;
+}
+
+

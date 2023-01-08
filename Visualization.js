@@ -146,9 +146,25 @@ function dragended(d) {
  * @param {Object} graph - The graph object.
  * @param {number} size - The new size for the nodes.
  */
-function changeSize(graph, size) {
+function changeNodesSize(graph, size) {
     // Iterate over the nodes in the graph
     for (const node of graph.nodes) {
       node.size = size;
     }
-  }
+}
+
+function changeNodeSize(graph, nodeName, size, byNodeId = false){
+    if(byNodeId){
+        const node = graph.nodes.find(node => node.id === nodeName);
+        if (!node) throw new Error(`Node with id ${nodeName} does not exist!`);
+        else{
+            node.size = size
+        }
+    } else{
+        const node = graph.nodes.find(node => node.name === nodeName);
+        if (!node) throw new Error(`Node with name ${nodeName} does not exist!`);
+        else{
+            node.size = size
+        }
+    }
+}
