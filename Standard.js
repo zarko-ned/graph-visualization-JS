@@ -47,9 +47,10 @@ function addNode(graph, nodeName, nodeId, size = 3) {
  * @param {(string|number)} source - The name or ID of the source node.
  * @param {(string|number)} target - The name or ID of the target node.
  * @param {boolean} [byNodeId=false] - If true, the `source` and `target` parameters are interpreted as node IDs.
- * @throws {Error} If the source or target node is not found, or if there are multiple nodes with the same name.
+ * @param {number} [weight=0] - Cost of weight, default is 0. 
+* @throws {Error} If the source or target node is not found, or if there are multiple nodes with the same name.
  */
-function addLink(graph, source, target, byNodeId = false) {
+function addLink(graph, source, target, weight = 0, byNodeId = false,) {
     // Find the source and target nodes in the graph
     let sourceNode, targetNode;
     if (byNodeId) {
@@ -71,11 +72,9 @@ function addLink(graph, source, target, byNodeId = false) {
         if (sourceNodes.length > 1 || targetNodes.length > 1) {
             throw new Error(`There are multiple nodes with name ${source} or ${target}!`);
         }
-
-
     }
     // Create the new link object and add it to the graph
-    const newLink = { source: sourceNode, target: targetNode };
+    const newLink = { source: sourceNode, target: targetNode, weight: weight };
     graph.links.push(newLink);
 }
 
