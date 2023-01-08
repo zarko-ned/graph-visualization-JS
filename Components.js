@@ -94,3 +94,31 @@ function getNodeById(graph, id) {
   if (!node) throw new Error(`Node with id ${id} does not exist!`);
   return node;
 }
+
+/**
+ * Returns a subgraph consisting of the nodes and links in the given connected component.
+ *
+ * @param {Object[]} connectedComponent - An array of node objects representing a connected component.
+ * @param {Object} graph - The original graph, with a nodes and links property.
+ * @return {Object} A subgraph with a nodes and links property, containing the nodes and links in the connected component.
+ */
+function getSubgraph(graph, connectedComponent) {
+  let subgraph = {
+    nodes: [],
+    links: []
+  };
+
+  // Add all nodes in the connected component to the subgraph
+  for (let node of connectedComponent) {
+    subgraph.nodes.push(node);
+  }
+
+  // Add all links that have both their source and target in the connected component to the subgraph
+  for (let link of graph.links) {
+    if (connectedComponent.includes(link.source) && connectedComponent.includes(link.target)) {
+      subgraph.links.push(link);
+    }
+  }
+
+  return subgraph;
+}
