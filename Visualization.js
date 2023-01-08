@@ -7,35 +7,35 @@
 function forceSimulation(graph) {
     // Create the force link and force many body forces
     const forceLink = d3
-      .forceLink()
-      .id(d => d.name)
-      .links(graph.links);
+        .forceLink()
+        .id(d => d.name)
+        .links(graph.links);
     const forceManyBody = d3.forceManyBody().strength(-30);
-  
+
     // Create the force simulation and add the forces
     const simulation = d3
-      .forceSimulation(graph.nodes)
-      .force("link", forceLink)
-      .force("charge", forceManyBody)
-      .force("center", d3.forceCenter(width / 2, height / 2));
-  
+        .forceSimulation(graph.nodes)
+        .force("link", forceLink)
+        .force("charge", forceManyBody)
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
     // Add a tick event to update the link and node positions
     simulation.on("tick", () => {
-      link
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
-      node
-        .attr("cx", d => d.x)
-        .attr("cy", d => d.y);
-      node.select("text")
-        .attr("x", d => d.x)
-        .attr("y", d => d.y);
+        link
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+        node
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+        node.select("text")
+            .attr("x", d => d.x)
+            .attr("y", d => d.y);
     });
-  
+
     return simulation;
-  }
+}
 
 /**
  * Appends a line element for each link in the given graph to the SVG.
@@ -48,17 +48,17 @@ function forceSimulation(graph) {
 function simulationLink(graph, cssColor = 'orange', lineWidth = 3) {
     // Append the line elements to the SVG
     const line = svg
-      .append("g")
-      .attr("class", "links")
-      .selectAll("line")
-      .data(graph.links)
-      .enter()
-      .append("line")
-      .style("stroke", cssColor)
-      .attr("stroke-width", d => lineWidth);
-  
+        .append("g")
+        .attr("class", "links")
+        .selectAll("line")
+        .data(graph.links)
+        .enter()
+        .append("line")
+        .style("stroke", cssColor)
+        .attr("stroke-width", d => lineWidth);
+
     return line;
-  }
+}
 
 /**
  * Appends a circle element for each node in the given graph to the SVG.
@@ -70,24 +70,24 @@ function simulationLink(graph, cssColor = 'orange', lineWidth = 3) {
 function simulationNode(graph, cssColor = 'red') {
     // Append the circle elements to the SVG
     const node = svg
-      .append("g")
-      .attr("class", "nodes")
-      .selectAll("circle")
-      .data(graph.nodes)
-      .enter()
-      .append("circle")
-      .attr("r", d => d.size)
-      .attr("fill", cssColor)
-      .call(
-        d3
-          .drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended)
-      );
-  
+        .append("g")
+        .attr("class", "nodes")
+        .selectAll("circle")
+        .data(graph.nodes)
+        .enter()
+        .append("circle")
+        .attr("r", d => d.size)
+        .attr("fill", cssColor)
+        .call(
+            d3
+                .drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended)
+        );
+
     return node;
-  }
+}
 
 
 /**
@@ -99,32 +99,32 @@ function simulationNode(graph, cssColor = 'red') {
 function showNodeName(graph) {
     // Append the group elements to the SVG
     const nodeGroup = svg
-      .selectAll(".node")
-      .data(graph.nodes)
-      .enter()
-      .append("g")
-      .attr("class", "node")
-      .call(
-        d3
-          .drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended)
-      );
-  
+        .selectAll(".node")
+        .data(graph.nodes)
+        .enter()
+        .append("g")
+        .attr("class", "node")
+        .call(
+            d3
+                .drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended)
+        );
+
     // Append the circle elements to the group elements
     nodeGroup
-      .append("circle")
-      .attr("r", 5);
-  
+        .append("circle")
+        .attr("r", 5);
+
     // Append the text elements to the group elements
     const nodeLabel = nodeGroup
-      .append("text")
-      .attr("dy", -3)
-      .text(d => d.name);
-  
+        .append("text")
+        .attr("dy", -3)
+        .text(d => d.name);
+
     return nodeGroup;
-  }
+}
 function dragstarted(d) {
     if (!d3.event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
@@ -149,22 +149,42 @@ function dragended(d) {
 function changeNodesSize(graph, size) {
     // Iterate over the nodes in the graph
     for (const node of graph.nodes) {
-      node.size = size;
+        node.size = size;
     }
 }
 
-function changeNodeSize(graph, nodeName, size, byNodeId = false){
-    if(byNodeId){
+function changeNodeSize(graph, nodeName, size, byNodeId = false) {
+    if (byNodeId) {
         const node = graph.nodes.find(node => node.id === nodeName);
         if (!node) throw new Error(`Node with id ${nodeName} does not exist!`);
-        else{
+        else {
             node.size = size
         }
-    } else{
+    } else {
         const node = graph.nodes.find(node => node.name === nodeName);
         if (!node) throw new Error(`Node with name ${nodeName} does not exist!`);
-        else{
+        else {
             node.size = size
         }
     }
+}
+
+/**
+ * Changes the color of a node with a specific name or ID in the given graph.
+ * @param {Object} graph - The graph object.
+ * @param {string|number} nodeNameOrId - The name or ID of the node to change the color of.
+ * @param {string} cssColor - The CSS color to set the node to.
+ * @param {boolean} byNodeId - Whether to search for the node by its ID or name.
+ */
+function changeNodeColor(graph, nodeNameOrId, cssColor, byNodeId = false) {
+    const node = byNodeId
+        ? graph.nodes.find(node => node.id == nodeNameOrId)
+        : graph.nodes.find(node => node.name == nodeNameOrId);
+    if (!node) throw new Error(`Node with ${byNodeId ? 'id' : 'name'} ${nodeNameOrId} does not exist!`);
+
+    // Select the node with the given name or ID and set its fill color
+    svg.selectAll(".nodes")
+        .selectAll("circle")
+        .filter(d => d[byNodeId ? 'id' : 'name'] === nodeNameOrId)
+        .attr("fill", cssColor);
 }

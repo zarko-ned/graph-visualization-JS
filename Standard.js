@@ -107,13 +107,25 @@ function numberOfLinks(graph) {
 function copyGraph(graph) {
     // Create a new object to hold the copied properties
     const copy = {};
-    
-    // Use the spread operator to copy the nodes and links arrays
-    copy.nodes = [...graph.nodes];
-    copy.links = [...graph.links];
-
-    // Use Object.assign() to copy the remaining properties
-    Object.assign(copy, graph);
-
+  
+    // Recursively copy the properties of the graph object
+    function copyProperties(obj, copy) {
+      for (const key in obj) {
+        // Check if the property is an object
+        if (typeof obj[key] === 'object') {
+          // Create a new object for the property
+          copy[key] = Array.isArray(obj[key]) ? [] : {};
+          // Recursively copy the properties of the object
+          copyProperties(obj[key], copy[key]);
+        } else {
+          // Copy the property
+          copy[key] = obj[key];
+        }
+      }
+    }
+    copyProperties(graph, copy);
+  
     return copy;
-}  
+  }
+
+  
