@@ -42,10 +42,10 @@ function forceSimulation(graph) {
  * 
  * @param {Object} graph - The graph object.
  * @param {string} cssColor - The CSS color of the lines.
- * @param {number} lineWidth - The width of the lines.
+ * @param {number} lineWidth - The width of the lines (optional).
  * @returns {Object} The line elements.
  */
-function simulationLink(graph, cssColor = 'orange', lineWidth = 3) {
+function simulationLink(graph, cssColor = 'orange', lineWidth) {
     // Append the line elements to the SVG
     const line = svg
         .append("g")
@@ -55,11 +55,24 @@ function simulationLink(graph, cssColor = 'orange', lineWidth = 3) {
         .enter()
         .append("line")
         .style("stroke", cssColor)
-        .attr("stroke-width", d => lineWidth)
+        .attr("stroke-width", d => lineWidth === undefined ? getLineWidth(d.weight) : lineWidth)
         .attr("marker-end", "url(#arrow)");
 
     return line;
+
+    function getLineWidth(weight) {
+        if (weight < 10) {
+            return 1;
+        } else if (weight >= 10 && weight < 20) {
+            return 5;
+        } else if (weight >= 20 && weight < 30) {
+            return 9;
+        } else {
+            return 12;
+        }
+    }
 }
+
 
 /**
  * Appends a circle element for each node in the given graph to the SVG.
@@ -154,6 +167,15 @@ function changeNodesSize(graph, size) {
     }
 }
 
+/**
+ * Changes the size of a node in the given graph.
+ *
+ * @param {Object} graph - The graph object.
+ * @param {(string|number)} nodeName - The name or ID of the node whose size should be changed.
+ * @param {number} size - The new size for the node.
+ * @param {boolean} [byNodeId=false] - If true, the `nodeName` parameter is interpreted as a node ID.
+ * @throws {Error} If the node is not found, or if there are multiple nodes with the same name.
+ */
 function changeNodeSize(graph, nodeName, size, byNodeId = false) {
     if (byNodeId) {
         const node = graph.nodes.find(node => node.id === nodeName);
@@ -196,7 +218,7 @@ function changeNodeColor(graph, nodeNameOrId, cssColor, byNodeId = false) {
  */
 function directedGraph(svg) {
     const defs = svg.append('defs');
-  
+
     defs.append('marker')
         .attr('id', 'arrow')
         .attr('markerWidth', 10)
@@ -205,7 +227,7 @@ function directedGraph(svg) {
         .attr('refY', 3)
         .attr('orient', 'auto')
         .attr('markerUnits', 'strokeWidth')
-      .append('path')
+        .append('path')
         .attr('d', 'M0,0 L0,6 L9,3 z')
         .attr('fill', '#999');
-  }
+}
