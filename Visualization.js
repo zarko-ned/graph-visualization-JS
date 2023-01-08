@@ -55,7 +55,8 @@ function simulationLink(graph, cssColor = 'orange', lineWidth = 3) {
         .enter()
         .append("line")
         .style("stroke", cssColor)
-        .attr("stroke-width", d => lineWidth);
+        .attr("stroke-width", d => lineWidth)
+        .attr("marker-end", "url(#arrow)");
 
     return line;
 }
@@ -188,3 +189,23 @@ function changeNodeColor(graph, nodeNameOrId, cssColor, byNodeId = false) {
         .filter(d => d[byNodeId ? 'id' : 'name'] === nodeNameOrId)
         .attr("fill", cssColor);
 }
+
+/**
+ * Creates an arrow marker definition for an SVG element.
+ * @param {Object} svg - The SVG element.
+ */
+function directedGraph(svg) {
+    const defs = svg.append('defs');
+  
+    defs.append('marker')
+        .attr('id', 'arrow')
+        .attr('markerWidth', 10)
+        .attr('markerHeight', 10)
+        .attr('refX', 9)
+        .attr('refY', 3)
+        .attr('orient', 'auto')
+        .attr('markerUnits', 'strokeWidth')
+      .append('path')
+        .attr('d', 'M0,0 L0,6 L9,3 z')
+        .attr('fill', '#999');
+  }
