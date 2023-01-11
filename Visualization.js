@@ -208,8 +208,44 @@ function changeNodeColor(graph, nodeNameOrId, cssColor, byNodeId = false) {
     // Select the node with the given name or ID and set its fill color
     svg.selectAll(".nodes")
         .selectAll("circle")
-        .filter(d => d[byNodeId ? 'id' : 'name'] === nodeNameOrId)
+        .filter(d => d[byNodeId ? 'id' : 'name'] == nodeNameOrId)
         .attr("fill", cssColor);
+}
+
+/**
+ * Change the color of a node in a graph for a specified amount of time.
+ * @param {Object} graph - The graph containing the node. The graph should be represented as an object with a `nodes` property which is an array of nodes.
+ * @param {string|number} nodeNameOrId - The name or ID of the node to change the color of.
+ * @param {string} cssColor - The new color to set the node to, in the format of a CSS color string.
+ * @param {number} miliseconds - The amount of time to keep the node in the new color, in miliseconds.
+ * @param {boolean} [byNodeId=false] - A flag to indicate whether to search for the node by its name or its ID.
+ */
+function changeNodeColorTime(graph, nodeNameOrId, cssColor, miliseconds, byNodeId = false) {
+    setTimeout(() => {
+        // Retrieve the node from the graph
+        const node = byNodeId
+            ? graph.nodes.find(node => node.id == nodeNameOrId)
+            : graph.nodes.find(node => node.name == nodeNameOrId);
+        if (!node) throw new Error(`Node with ${byNodeId ? 'id' : 'name'} ${nodeNameOrId} does not exist!`);
+        // record the original color
+        let originalColor = svg.selectAll(".nodes")
+            .selectAll("circle")
+            .filter(d => d[byNodeId ? 'id' : 'name'] == nodeNameOrId)
+            .attr("fill");
+        // Select the node with the given name or ID and set its fill color
+        svg.selectAll(".nodes")
+            .selectAll("circle")
+            .filter(d => d[byNodeId ? 'id' : 'name'] == nodeNameOrId)
+            .attr("fill", cssColor);
+
+        // Schedule the function to change the color back to the original color after 2 seconds
+        setTimeout(() => {
+            svg.selectAll(".nodes")
+                .selectAll("circle")
+                .filter(d => d[byNodeId ? 'id' : 'name'] == nodeNameOrId)
+                .attr("fill", originalColor);
+        }, miliseconds);
+    }, miliseconds);
 }
 
 /**

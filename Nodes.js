@@ -77,21 +77,17 @@ function getNodeById(graph, id) {
 }
 
 /**
- * Returns an array of node objects with the given name in the given graph.
- *
- * @param {Object} graph - The graph object.
- * @param {string} name - The name of the nodes to find.
- * @returns {Object[]} An array of node objects.
+ * Find nodes by name in a graph.
+ * @param {Object} graph - The graph to search. The graph should be represented as an object with a `nodes` property which is an array of nodes.
+ * @param {string} name - The name of the node to find.
+ * @returns {Object|Array} A node object or an array of nodes if there are multiple nodes with the same name.
  * @throws {Error} If no nodes with the given name are found.
  */
 function getNodesByName(graph, name) {
-    // Find all nodes with the given name
-    let nodes = graph.nodes.filter(node => node.name === name);
+    const nodes = graph.nodes.filter(node => node.name === name);
     if (!nodes.length) {
-        // Throw an error if no nodes with the given name are found
         throw new Error(`Node with name ${name} does not exist!`);
     }
-    return nodes;
+    return nodes.length === 1 ? nodes[0] : nodes;
 }
-
 
