@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <meta charset="utf-8" />
-<style>
-  .links line {
-    stroke: #999;
-    stroke-opacity: 0.6;
-  }
 
-  .nodes circle {
-    stroke: #fff;
-    stroke-width: 1.5px;
-  }
-</style>
+
 <svg width="960" height="600"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="Standard.js"></script>
 <script src="Visualization.js"></script>
 <script src="Nodes.js"></script>
+<script src="Algorithms.js"></script>
+<script src="Links.js"></script>
 <script>
   // Select the SVG element and store its width and height
   var svg = d3.select("svg");
   var width = svg.attr("width");
   var height = svg.attr("height");
 
+
   // Initialize the graph data
   var graph = createGraph();
   addNode(graph, 'A', 0)
   addNode(graph, 'B', 1);
-  addNode(graph, 'C');
-  addLink(graph, 'A', 'B');
-  addLink(graph, 'A', 'C');
+  addNode(graph, 'C', 2);
+  addNode(graph, 'D', 3);
+  addNode(graph, 'E', 4);
+  addLink(graph, 'A', 'B', 11);
+  addLink(graph, 'A', 'C', 1);
+  addLink(graph, 'C', 'D', 4);
+  addLink(graph, 'C', 'E', 3);
+  addLink(graph, 'D', 'E', 2);
+  changeNodesSize(graph, 10);
 
-  console.log(findNeighbors(graph, 'A'));
-  changeSize(graph, 10);
 
   // Initialize the simulation and link and node elements
   var simulation = forceSimulation(graph);
-  var link = simulationLink(graph);
+  var link = simulationLink(graph, 'orange');
   var node = simulationNode(graph);
+  //  const startNode = getNodesByName(graph, 'A')
+  //  bfs(graph, startNode, (node)=>{
+  //   console.log(node)
+  //  })
+
 
 </script>
