@@ -50,9 +50,12 @@ function addNode(graph, nodeName, nodeId, size = 3) {
  * @param {number} [weight=0] - Cost of weight, default is 0. 
 * @throws {Error} If the source or target node is not found, or if there are multiple nodes with the same name.
  */
-function addLink(graph, source, target, weight = 0, byNodeId = false,) {
+function addLink(graph, source, target, weight = 1, byNodeId = false,) {
     // Find the source and target nodes in the graph
     let sourceNode, targetNode;
+    if (weight <= 0) {
+        throw new Error(`Weigth can not be less than 1!`);
+    }
     if (byNodeId) {
         sourceNode = graph.nodes.find(node => node.id === source);
         targetNode = graph.nodes.find(node => node.id === target);
