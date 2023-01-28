@@ -130,4 +130,25 @@ function copyGraph(graph) {
     return copy;
 }
 
+/**
+
+Deletes a node from a graph.
+@param {Object} graph - The graph object containing the nodes and links.
+@param {string|number} nodeName - The name or id of the node to be deleted.
+@param {boolean} [byNodeId=false] - A flag indicating whether to search for the node by its id (true) or name (false).
+*/
+function deleteNode(graph, nodeName, byNodeId = false) {
+    let delNode;
+    if (byNodeId) {
+        delNode = graph.nodes.find(node => node.id === nodeName);
+        if (!delNode) throw new Error(`Node with id ${nodeName} does not exist!`);
+    } else {
+        delNode = graph.nodes.find(node => node.name === nodeName);
+        if (!delNode) throw new Error(`Node with name ${nodeName} does not exist!`);
+    }
+    const delNodeIndex = graph.nodes.indexOf(delNode);
+    graph.nodes.splice(delNodeIndex, 1);
+    graph.links = graph.links.filter(link => link.source !== delNode && link.target !== delNode);
+}
+
 
