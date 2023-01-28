@@ -101,7 +101,12 @@ function simulationNode(graph, cssColor = 'red') {
                 .on("end", dragended)
         );
 
+
     graph.nodes.forEach(node => node.color = cssColor);
+
+    node.on("click", function (d) {
+       clickedNode(d);
+    })
 
     return node;
 }
@@ -230,7 +235,7 @@ function changeNodeColorTime(graph, nodeNameOrId, cssColor, miliseconds, byNodeI
         const node = byNodeId
             ? graph.nodes.find(node => node.id == nodeNameOrId)
             : graph.nodes.find(node => node.name == nodeNameOrId);
-            node.color = cssColor;
+        node.color = cssColor;
         if (!node) throw new Error(`Node with ${byNodeId ? 'id' : 'name'} ${nodeNameOrId} does not exist!`);
         // record the original color
         let originalColor = svg.selectAll(".nodes")
@@ -271,4 +276,9 @@ function directedGraph(svg) {
         .append('path')
         .attr('d', 'M0,0 L0,6 L9,3 z')
         .attr('fill', '#999');
+}
+
+
+function clickedNode(data){
+  alert('Node name: '+data.name +'\n'+'Node ID: '+ data.id);
 }
