@@ -151,4 +151,14 @@ function deleteNode(graph, nodeName, byNodeId = false) {
     graph.links = graph.links.filter(link => link.source !== delNode && link.target !== delNode);
 }
 
+/**
+ * 
+ * @param {Object} graph - The graph object
+ * @param {Object} link - The link to delete
+ */
+function deleteLink(graph, link) {
+    const delLinkIndex = graph.links.indexOf(link);
+    graph.links.splice(delLinkIndex, 1);
+}
+
 
