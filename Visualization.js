@@ -100,6 +100,8 @@ function simulationNode(graph, cssColor = 'red') {
                 .on("end", dragended)
         );
 
+    graph.nodes.forEach(node => node.color = cssColor);
+
     return node;
 }
 
@@ -210,6 +212,7 @@ function changeNodeColor(graph, nodeNameOrId, cssColor, byNodeId = false) {
         .selectAll("circle")
         .filter(d => d[byNodeId ? 'id' : 'name'] == nodeNameOrId)
         .attr("fill", cssColor);
+    node.color = cssColor;
 }
 
 /**
@@ -226,6 +229,7 @@ function changeNodeColorTime(graph, nodeNameOrId, cssColor, miliseconds, byNodeI
         const node = byNodeId
             ? graph.nodes.find(node => node.id == nodeNameOrId)
             : graph.nodes.find(node => node.name == nodeNameOrId);
+            node.color = cssColor;
         if (!node) throw new Error(`Node with ${byNodeId ? 'id' : 'name'} ${nodeNameOrId} does not exist!`);
         // record the original color
         let originalColor = svg.selectAll(".nodes")

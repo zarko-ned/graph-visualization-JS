@@ -134,3 +134,56 @@ function dfs(graph, startNode, visitFn) {
     }
   }
 }
+
+function findSimilarNodeGroups(graph, metric) {
+  function findNeighbors(graph, nodeName, byNodeId) {
+    const neighbors = [];
+
+    for (const link of graph.links) {
+      if (byNodeId) {
+        const node = graph.nodes.find(node => node.id === nodeName);
+        if (!node) throw new Error(`Node with id ${nodeName} does not exist!`);
+        else if (link.source.id === nodeName) {
+          neighbors.push(link.target);
+        }
+        else if (link.target.id === nodeName) {
+          neighbors.push(link.source);
+        }
+      } else {
+        const node = graph.nodes.find(node => node.name === nodeName);
+        if (!node) throw new Error(`Node with name ${nodeName} does not exist!`);
+        else if (link.source.name === nodeName) {
+          neighbors.push(link.target);
+        }
+        else if (link.target.name === nodeName) {
+          neighbors.push(link.source);
+        }
+      }
+    }
+
+    return neighbors;
+  }
+  const groups = [];
+  const visited = new Set();
+
+  for (const node of graph.nodes) {
+    if (!visited.has(node)) {
+      const group = [node];
+      visited.add(node);
+      const queue = [...findNeighbors(graph, node.name)];
+
+      while (queue.length) {
+        const currentNode = queue.shift();
+        if (!visited.has(currentNode)) {
+          visited.add(currentNode);
+          if (metric(node, currentNode)) {
+            group.push(currentNode);
+            queue.push(...findNeighbors(graph, currentNode.name));
+          }
+        }
+      }
+      groups.push(group);
+    }
+  }
+  return groups;
+}
