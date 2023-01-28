@@ -4,12 +4,13 @@
  * @param {Object} graph - The graph object.
  * @returns {Object} The force simulation.
  */
-function forceSimulation(graph) {
+function forceSimulation(graph, linkLength = 50) {
     // Create the force link and force many body forces
     const forceLink = d3
         .forceLink()
         .id(d => d.name)
-        .links(graph.links);
+        .links(graph.links)
+        .distance(linkLength);
     const forceManyBody = d3.forceManyBody().strength(-30);
 
     // Create the force simulation and add the forces
