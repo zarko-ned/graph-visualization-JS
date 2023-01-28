@@ -135,6 +135,12 @@ function dfs(graph, startNode, visitFn) {
   }
 }
 
+/**
+ * Find similar node groups in a graph based on a given metric
+ * @param {Object} graph - The graph to search for similar node groups
+ * @param {Function} metric - The function to use for determining similarity between nodes
+ * @return {Array} groups - An array of arrays representing the similar node groups found in the graph
+ */
 function findSimilarNodeGroups(graph, metric) {
   function findNeighbors(graph, nodeName, byNodeId) {
     const neighbors = [];
