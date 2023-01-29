@@ -22,7 +22,7 @@ function createGraph() {
  * @param {number} [nodeId] - The optional ID of the node. If not provided, the ID will be set to the maximum existing ID + 1.
  * @param {number} [size=3] - The optional size of the node. Default is 3.
  */
-function addNode(graph, nodeName, nodeId, size = 3) {
+function addNode(graph, nodeName, nodeId, size = 10) {
     let newNode;
     if (typeof nodeId === 'undefined') {
         // Set the node ID to the maximum existing ID + 1 if no ID is provided
